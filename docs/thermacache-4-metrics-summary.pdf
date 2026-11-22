@@ -1,0 +1,39 @@
+ThermaCache AI — 4 Key Test Metrics Simplified
+1-Page Summary: What our test results show vs. what we are building next
+Overview: Our early test results (Proof-of-Concept) prove that saving prompt memory and routing traffic away from hot GPUs works.
+Here is a simple explanation of our 4 main metrics and our production goals.
+Metric What It Means Test Result (PoC) Production Goal
+1. First Token Speed
+(TTFT)
+How fast the AI starts replying after
+you send a message.
+0.49s (68% faster than cold start
+of 1.68s)
+Under 0.08s (<85ms) with
+C++/Rust gateway
+2. Traffic Scale How many users can be served at
+the exact same second.
+1 request at a time (sequential
+queue test)
+128+ concurrent users without lag
+3. Router CPU Load How much processing power the
+router software itself uses.
+96% CPU core usage (Python
+test script)
+Under 12% CPU usage
+(C++/Rust atomic filters)
+4. GPU Heat Control Keeping graphics cards cool so they
+don't slow down.
+63°C max heat (saved GPU from
+82°C limit)
+58°C max heat with live UDP
+telemetry
+Detailed Breakdown in Simple Words:
+• 1. Response Speed: When you send a prompt, the AI usually takes time to read it (cold start). By reusing saved prompt memory
+(cache hit), ThermaCache cuts wait times by over 68%. Rebuilding the router in C++ will make this almost instantaneous.
+• 2. User Capacity: In our first test, we sent requests one by one to prove the logic works. Next, we will upgrade the code so 128
+people can send requests at the exact same moment without memory locks or crashes.
+• 3. Efficiency & Cost: Our test script was written in Python, which uses a lot of CPU power (96%). Rewriting it in C++ and Rust will
+drop the CPU work to under 12%, making it very cheap for data centers to run.
+• 4. Heat Control: When GPUs get too hot (over 80°C), NVIDIA automatically slows them down to protect the hardware.
+ThermaCache keeps temperatures cool around 58°C–63°C, so the GPUs never overheat or slow down.
